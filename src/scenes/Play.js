@@ -1,15 +1,26 @@
-import { Sprite } from 'pixi.js';
 import Scene from './Scene';
-import gsap from 'gsap';
 import Footer from '../components/Footer';
+import Pokeball from '../components/Pokeball';
+import Button from '../components/Button';
 
 export default class Play extends Scene {
   async onCreated() {
-
     const footer = new Footer();
-    footer.x = - window.innerWidth / 2;
+    footer.x = -window.innerWidth / 2;
     footer.y = window.innerHeight / 2 - footer.height;
-    this.addChild(footer);
+    // this.addChild(footer);
+
+    const pokeball = new Pokeball();
+    const button = new Button();
+
+    button.on('click', async () => {
+      button.hide();
+      await pokeball.open();
+      pokeball.close();
+      button.show();
+    });
+
+    this.addChild(pokeball, button);
   }
 
   /**
@@ -19,7 +30,7 @@ export default class Play extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
-  onResize(width, height) { // eslint-disable-line no-unused-vars
-
+  onResize(width, height) {
+    // eslint-disable-line no-unused-vars
   }
 }
