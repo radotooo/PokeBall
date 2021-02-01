@@ -104,7 +104,7 @@ export default class Pokeball extends Container {
     });
 
     await gsap.to(steps, {
-      duration: 4,
+      duration: 2,
       progress: 1,
       ease: 'circ.out',
     });
