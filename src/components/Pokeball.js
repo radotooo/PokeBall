@@ -35,6 +35,7 @@ export default class Pokeball extends Container {
 
     this.text.alpha = 1;
     await this._shuffle();
+    this.emit(Pokeball.events.OPEN_END);
   }
 
   close() {
@@ -44,6 +45,7 @@ export default class Pokeball extends Container {
 
     gsap.to(this.top, { y: -100, duration: 0.5 });
     gsap.to(this.bottom, { y: 100, duration: 0.5 });
+    this.emit(Pokeball.events.CLOSE_END);
   }
 
   /**
