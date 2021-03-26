@@ -11,7 +11,7 @@ export default class Play extends Scene {
     // this.addChild(footer);
 
     const pokeball = new Pokeball();
-    const button = new Button();
+    const button = new Button(-120, 240);
 
     button.on('click', async () => {
       button.hide();

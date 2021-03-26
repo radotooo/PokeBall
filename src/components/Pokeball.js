@@ -8,24 +8,75 @@ const EVENTS = {
   CLOSE_START: 'close_start',
 };
 
+/**
+ * Initializes a new instance of Pokeball
+ * @class
+ * @extends {PIXI.Container}
+ */
 export default class Pokeball extends Container {
   constructor() {
     super();
 
     this.name = 'pokeball';
-
-    this.text = this._createText();
-    this.top = this._createSprite(0, -100, 0.5, 'ballTop');
-    this.bottom = this._createSprite(0, 100, 0.5, 'ballBottom');
+    this.top = null;
+    this.bottom = null;
+    this.text = null;
     this.isOpened = false;
+    this.randomPockemons = ['Pickachu', 'Eevee', 'Snorlax', 'Ditto'];
 
     this._init();
+  }
+
+  /**
+   * @private
+   */
+  _init() {
+    this._createBody();
+    this._createText();
+  }
+
+  /**
+   * @private
+   */
+  _createBody() {
+    const top = new Sprite.from('ballTop');
+
+    top.anchor.set(0.5);
+    top.y = -100;
+    this.top = top;
+    const bottom = new Sprite.from('ballBottom');
+
+    bottom.anchor.set(0.5);
+    bottom.y = 100;
+    this.bottom = bottom;
+
+    this.addChild(this.top, this.bottom);
+  }
+
+  /**
+   * @private
+   */
+  _createText() {
+    const text = new Text('temp', {
+      fontSize: 200,
+      fontStyle: 'bold',
+      fill: 0xffffff,
+    });
+
+    text.anchor.set(0.5);
+    text.alpha = 0;
+
+    this.text = text;
+    this.addChild(this.text);
   }
 
   static get events() {
     return EVENTS;
   }
 
+  /**
+   * @public
+   */
   async open() {
     this.isOpened = true;
     this.emit(Pokeball.events.OPEN_START);
@@ -38,6 +89,9 @@ export default class Pokeball extends Container {
     this.emit(Pokeball.events.OPEN_END);
   }
 
+  /**
+   * @public
+   */
   close() {
     this.isOpened = false;
     this.text.alpha = 0;
@@ -45,34 +99,8 @@ export default class Pokeball extends Container {
 
     gsap.to(this.top, { y: -100, duration: 0.5 });
     gsap.to(this.bottom, { y: 100, duration: 0.5 });
+
     this.emit(Pokeball.events.CLOSE_END);
-  }
-
-  /**
-   * @private
-   */
-  _createSprite(x, y, anchor, texture) {
-    const sprite = new Sprite.from(texture);
-    sprite.anchor.set(anchor);
-    sprite.x = x;
-    sprite.y = y;
-
-    return sprite;
-  }
-
-  /**
-   * @private
-   */
-  _createText() {
-    const text = new Text('temp', {
-      fontSize: 200,
-      fontStyle: 'bold',
-      fill: 0xffffff,
-    });
-    text.anchor.set(0.5);
-    text.alpha = 0;
-
-    return text;
   }
 
   /**
@@ -104,17 +132,9 @@ export default class Pokeball extends Container {
     });
 
     await gsap.to(steps, {
-      duration: 2,
+      duration: 5,
       progress: 1,
       ease: 'circ.out',
     });
-  }
-
-  /**
-   * @private
-   */
-  _init() {
-    this.randomPockemons = ['Pickachu', 'Eevee', 'Snorlax', 'Ditto'];
-    this.addChild(this.top, this.bottom, this.text);
   }
 }
